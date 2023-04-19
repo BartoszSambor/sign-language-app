@@ -18,8 +18,10 @@ def cam_pred():
 
         # frame processing
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        gray = gray / 255.0
         scaled = cv2.resize(gray, (28, 28))
-        # cv2.imshow("scaled", scaled)
+
+        cv2.imshow("scaled", cv2.resize(scaled.reshape(28, 28), (300, 300)))
         input_im = scaled.reshape(-1, 28, 28, 1)
         results = model.predict(input_im)
         pred = np.argmax(results, axis=1)

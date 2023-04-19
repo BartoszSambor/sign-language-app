@@ -4,8 +4,9 @@ import pandas as pd
 import cv2
 import string
 
-model = keras.models.load_model('./models/model2/best.h5')
+# model = keras.models.load_model('./models/model2/best.h5')
 # model = keras.models.load_model('./models/model1')
+model = keras.models.load_model('./notebooks/models/model_7_epoch.h5')
 
 sign_test = pd.read_csv('./tests/sign_mnist_test/sign_mnist_test.csv')
 letter = dict(enumerate(string.ascii_uppercase))
@@ -17,6 +18,9 @@ def file_pred():
 
     inputs_test = sign_test.iloc[:, 1:].to_numpy()
     targets_test = sign_test['label'].to_numpy()
+
+    # normalize inputs
+    inputs_test = inputs_test / 255.0
 
     inputs_test = inputs_test.reshape(-1, 28, 28, 1)
 
