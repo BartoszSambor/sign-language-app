@@ -5,4 +5,5 @@
  Model and data taken from https://www.kaggle.com/code/yassmenyoussef/sign-language-using-cnn-acc-100-lr-acc-70
  
  # Prepare own test set
- with camera_acquisition.py
+with camera_acquisition.py
+and run model_validation.py to test this dataset 
