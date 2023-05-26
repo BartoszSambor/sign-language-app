@@ -3,6 +3,10 @@ import os
 
 # number of images per letter
 samples_num = 3
+# set this to not overwrite others images
+# e.g. samples_num=2 starting_index=3 gives files A_3.jpg, A_4.jpg, B_3.jpg, B_4.jpg ,...
+starting_index = 4
+
 
 # Create a VideoCapture object
 cap = cv2.VideoCapture(0)
@@ -21,17 +25,16 @@ def generate_filename():
     # 3 images per letter
     for letter in letters:
         for i in range(samples_num):
-            yield f"./tests/my_dataset/{letter}_{i}.jpg"
+            yield f"./tests/my_dataset/{letter}_{i + starting_index}.jpg"
 
 
 filenames = list(generate_filename())
-
 print(f"Next filename: {filenames[0]}")
 if os.path.isfile(filenames[0]):
     print("Warning, existing file will be overwritten")
 
+idx = 0
 while True:
-    idx = 0
     # Capture frame-by-frame
     ret, frame = cap.read()
 
