@@ -52,9 +52,13 @@ def prepare_image(image):
             hand = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
             hand = hand[y_min:y_max, x_min:x_max]
 
-    scaled = cv2.resize(hand, (64, 64))
+
+    # scaled = cv2.resize(hand, (64, 64))
+    # version without mediapipe hand recognition
+    scaled = cv2.resize(image, (64, 64))
+
     # TODO: I don;t know about correct type and range for input image
-    scaled = (scaled / np.max(scaled) * 255).astype("uint8")
+    # scaled = (scaled / np.max(scaled) * 255).astype("uint8")
     return scaled
 
 
@@ -188,7 +192,7 @@ def number_to_letter(number):
 
 
 def load_dataset():
-    folder = "./tests/my_dataset/"
+    folder = "./tests/daniel_my_dataset/"
     raw_data = []
     for filename in os.listdir(folder):
         letter = filename.split("/")[-1][0]  # first letter of filename is a label
