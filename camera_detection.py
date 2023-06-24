@@ -20,7 +20,7 @@ hand_finder = HandSearch()
 
 # model = keras.models.load_model('./models/ASL/ASL.h5')
 
-model = keras.models.load_model('./models/mobineNetFineT1/mobileNetV2+10.h5')
+model = keras.models.load_model('models/mobileNetFineT1/mobileNetV2+10.h5')
 
 def prepare_image(image, output_size: (int, int), cmap, truncate_hands=True, equalize_value=True):
     image = image.copy()

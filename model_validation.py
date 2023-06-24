@@ -13,7 +13,7 @@ import numpy as np
 
 # model = keras.models.load_model('./models/ASL/ASL.h5') # 0.33 u Daniela
 # model = keras.models.load_model('./models/mobileNet/mobileNetV2.h5') # 0.25 na każdym datasecie, float na wejściu
-model = keras.models.load_model('./models/mobineNetFineT1/mobileNetV2+10.h5')  # 0.8 na testowym , po 10 epokach douczenia
+model = keras.models.load_model('models/mobileNetFineT1/mobileNetV2+10.h5')  # 0.8 na testowym , po 10 epokach douczenia
 
 # model = keras.models.load_model('./models/ASLv2/model1.h5')
 
@@ -60,7 +60,7 @@ def prepare_image(image, output_size: (int, int), cmap, truncate_hands=False, eq
 
 # cmap = "RGB" or "GRAY"
 def load_dataset(output_size: (int, int), cmap):
-    folder = "./tests/daniel_my_dataset/"
+    folder = "./tests/dataset_large_1/"
     raw_data = []
     for filename in os.listdir(folder):
         letter = filename.split("/")[-1][0]  # first letter of filename is a label
