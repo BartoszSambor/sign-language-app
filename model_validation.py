@@ -11,7 +11,10 @@ import cv2
 import mediapipe as mp
 import numpy as np
 
-model = keras.models.load_model('./models/ASL/ASL.h5')
+# model = keras.models.load_model('./models/ASL/ASL.h5') # 0.33 u Daniela
+# model = keras.models.load_model('./models/mobileNet/mobileNetV2.h5') # 0.25 na każdym datasecie, float na wejściu
+model = keras.models.load_model('./models/mobineNetFineT1/mobileNetV2+10.h5')  # 0.8 na testowym , po 10 epokach douczenia
+
 # model = keras.models.load_model('./models/ASLv2/model1.h5')
 
 # model = keras.models.load_model('./models/mediapipe/smnist.h5')
@@ -23,7 +26,7 @@ hand_finder = HandSearch()
 # cmap: 'RGB' or 'GRAY'
 # truncate_hands finds hand and cut out it
 # equalize_value equalize histogram of third channel in HSV colorspace
-def prepare_image(image, output_size: (int, int), cmap, truncate_hands=True, equalize_value=True):
+def prepare_image(image, output_size: (int, int), cmap, truncate_hands=False, equalize_value=False):
     image = image.copy()
 
     if equalize_value:
@@ -49,8 +52,8 @@ def prepare_image(image, output_size: (int, int), cmap, truncate_hands=True, equ
     # cv2.imshow("scaled", cv2.resize(scaled, (300, 300)))
     # cv2.waitKey(100)
 
-    scaled = (scaled / np.max(scaled) * 255).astype("uint8")  # for uint8
-    # scaled = (scaled / np.max(scaled)).astype("float") # for float
+    # scaled = (scaled / np.max(scaled) * 255).astype("uint8")  # for uint8
+    scaled = (scaled / np.max(scaled)).astype("float")  # for float
     return scaled
 
 
@@ -70,7 +73,7 @@ def load_dataset(output_size: (int, int), cmap):
             channels = 1
         else:
             channels = 3
-        images.append(prepare_image(image, output_size, cmap).reshape(-1, *output_size, channels))
+        images.append(prepare_image(image, output_size, cmap, True).reshape(-1, *output_size, channels))
         labels.append(letter_to_number(letter))
 
     return images, labels
@@ -85,9 +88,24 @@ def draw_confusion_matrix(x_test, y_test, output_size: (int, int), cmap):
     predictions = model.predict(x_test)
     predictions = np.argmax(predictions, axis=1)
     print(accuracy_score(y_test, predictions))
+    # mid = len(predictions) // 2
+    # labels_pred = [number_to_letter(i) for i in predictions]
+    # labels_true = [number_to_letter(i) for i in y_test]
+
+    # cm1 = confusion_matrix(labels_true[:mid], labels_pred[:mid])
+    # cm2 = confusion_matrix(labels_true[mid:], labels_pred[mid:])
+
+    # disp1 = ConfusionMatrixDisplay(cm1)
+    # disp2 = ConfusionMatrixDisplay(cm2)
+    #
+    # disp1.plot()
+    # disp2.plot()
+
     cm = confusion_matrix(y_test, predictions)
     disp = ConfusionMatrixDisplay(cm)
     disp.plot()
+
+
     plt.show()
 
 
@@ -102,5 +120,8 @@ def one_by_one_test(x_test, y_test):
         cv2.waitKey(0)
 
 
-draw_confusion_matrix(*load_dataset((64, 64), "RGB"), (64, 64), "RGB")
+# draw_confusion_matrix(*load_dataset((64, 64), "RGB"), (64, 64), "RGB")
+# draw_confusion_matrix(*load_dataset((64, 64), "RGB"), (64, 64), "RGB")
+draw_confusion_matrix(*load_dataset((224, 224), "RGB"), (224, 224), "RGB")
+
 # one_by_one_test(*load_dataset())

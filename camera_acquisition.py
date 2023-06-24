@@ -2,11 +2,11 @@ import cv2
 import os
 
 # number of images per letter
-samples_num = 3
+samples_num = 50
 # set this to not overwrite others images
 # e.g. samples_num=2 starting_index=3 gives files A_3.jpg, A_4.jpg, B_3.jpg, B_4.jpg ,...
-starting_index = 4
-
+starting_index = 0
+folder_name = "dataset_large_1"  # create directory before
 
 # Create a VideoCapture object
 cap = cv2.VideoCapture(0)
@@ -19,13 +19,18 @@ if not cap.isOpened():
 
 def generate_filename():
     # asl language letters
-    letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'K',
-               'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U',
-               'V', 'W', 'X', 'Y']
+    # letters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'K',
+    #            'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U',
+    #            'V', 'W', 'X', 'Y']
+    # letters = ['A', 'B', 'C', 'O', 'V', 'W']
+    # letters = ['D', 'E', 'F', 'G', 'H', 'I', 'K',
+    #            'L', 'M', 'N', 'P', 'Q', 'R', 'S', 'T', 'U',
+    #            'X', 'Y']
+    letters = ['U', 'X', 'Y']
     # 3 images per letter
     for letter in letters:
         for i in range(samples_num):
-            yield f"./tests/my_dataset/{letter}_{i + starting_index}.jpg"
+            yield f"./tests/{folder_name}/{letter}_{i + starting_index}.jpg"
 
 
 filenames = list(generate_filename())

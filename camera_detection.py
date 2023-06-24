@@ -18,8 +18,9 @@ from hand_truncation import HandSearch
 
 hand_finder = HandSearch()
 
-model = keras.models.load_model('./models/ASL/ASL.h5')
+# model = keras.models.load_model('./models/ASL/ASL.h5')
 
+model = keras.models.load_model('./models/mobineNetFineT1/mobileNetV2+10.h5')
 
 def prepare_image(image, output_size: (int, int), cmap, truncate_hands=True, equalize_value=True):
     image = image.copy()
@@ -47,8 +48,8 @@ def prepare_image(image, output_size: (int, int), cmap, truncate_hands=True, equ
     # cv2.imshow("scaled", cv2.resize(scaled, (300, 300)))
     # cv2.waitKey(100)
 
-    scaled = (scaled / np.max(scaled) * 255).astype("uint8")  # for uint8
-    # scaled = (scaled / np.max(scaled)).astype("float") # for float
+    # scaled = (scaled / np.max(scaled) * 255).astype("uint8")  # for uint8
+    scaled = (scaled / np.max(scaled)).astype("float") # for float
     return scaled
 
 
@@ -68,14 +69,14 @@ def cam_pred_mediapipe():
         # scaled = prepare_image(frame, (28, 28), "GRAY")
         # cv2.imshow("scaled", cv2.resize(scaled.reshape(28, 28), (300, 300)))
         # input_im = scaled.reshape(-1, 28, 28, 1)
-        scaled = prepare_image(frame, (64, 64), "RGB", True, False)
-        continue
+        scaled = prepare_image(frame, (224, 224), "RGB", True, False)
+
         cv2.imshow("scaled", cv2.resize(scaled, (300, 300)))
-        input_im = scaled.reshape(-1, 64, 64, 3)
+        input_im = scaled.reshape(-1, 224, 224, 3)
         results = model.predict(input_im)
         pred = np.argmax(results, axis=1)
         print(pred, number_to_letter(pred))
-        print(results)
+        # print(results)
     cap.release()
 
 
