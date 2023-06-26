@@ -5,3 +5,6 @@
 # Prepare own test set
 with camera_acquisition.py  
 and run model_validation.py to test this dataset 
+# Dataset augmentation 
+with data_augmentation.py
+
